@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Feed {
+  id           String         @id
+  name         String
+  url          String         @unique
+  authorId     String?
+  author       User?          @relation("feedauthor", fields: [authorId], references: [id])
+  SavedArtists SavedArtists[] @relation("SavedArtistsFeed")
+  tag          FeedTag[]
+  likes        User[]         @relation("feedsUserlike")
+}
+
+model Bundel {
+  id          String      @id
+  name        String
+  description String
+  authorId    String?
+  author      User?       @relation("bundelauthor", fields: [authorId], references: [id])
+  tag         BundelTag[]
+  Likes       User[]      @relation("bundelluserikes")
+}
+
+model User {
+  id           String         @id
+  auth0        String         @unique
+  nickname     String?
+  picture      String?
+  Bundel       Bundel[]       @relation("bundelauthor")
+  Feed         Feed[]         @relation("feedauthor")
+  SavedArtists SavedArtists[] @relation("SavedArtistsAuthor")
+  bundelLikes  Bundel[]       @relation("bundelluserikes")
+  feedLikes    Feed[]         @relation("feedsUserlike")
+}
+
+model SavedArtists {
+  id       String  @id
+  content  Json
+  feedsId  String
+  authorId String?
+  author   User?   @relation("SavedArtistsAuthor", fields: [authorId], references: [id])
+  feeds    Feed    @relation("SavedArtistsFeed", fields: [feedsId], references: [id])
+}
+
+model BundelTag {
+  id       String  @id
+  name     String  @unique
+  bundelId String?
+  Bundel   Bundel? @relation(fields: [bundelId], references: [id])
+}
+
+model FeedTag {
+  id    String @id
+  name  String @unique
+  feeds Feed[]
+}
