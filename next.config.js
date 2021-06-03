@@ -1,30 +1,29 @@
-require("dotenv").config();
+require('dotenv').config();
 
 const {
     DATABASE_URL,
-    Auth0_Client_ID,
-    Auth0_Client_Domain,
-    Auth0_Client_Secret,
-    Auth0_Client_Scope,
-    Auth0_Client_Cookie,
-    BackEndAddress
+    AUTH0_CLIENTID,
+    AUTH0_DOMAIN,
+    AUTH0_CLIENT_SECRET,
+    AUTH0_SCOPE,
+    AUTH0_COOKIE,
+    BACKEND_ADDRESS,
 } = process.env;
 
 module.exports = {
-    publicRunTimeConfig : {
-        BackEndUrl : `${BackEndAddress}/api/graphql`
+    publicRuntimeConfig: {
+        BACKEND_URL: `${BACKEND_ADDRESS}/api/graphql`,
+        CORS_URL: `${BACKEND_ADDRESS}/api/cors`,
     },
-    
-    serverRunTimeConfig : {
-        auth:{
-            domain: Auth0_Client_Domain,
-            clientId:Auth0_Client_ID,
-            clientSecret:Auth0_Client_Secret,
-            scope:Auth0_Client_Scope,
-            redirectUri:`${BackEndAddress}/api/calback`,
-            postLogoutRedirectUri:`${BackEndAddress}/`
-
+    serverRuntimeConfig: {
+        auth: {
+            domain: AUTH0_DOMAIN,
+            clientId: AUTH0_CLIENTID,
+            clientSecret: AUTH0_CLIENT_SECRET,
+            scope: AUTH0_SCOPE,
+            redirectUri: `${BACKEND_ADDRESS}/api/callback`,
+            postLogoutRedirectUri: `${BACKEND_ADDRESS}/`,
         },
-        cookieSecret:Auth0_Client_Cookie
+        cookieSecret: AUTH0_COOKIE,
     },
-}
+};
