@@ -3,10 +3,16 @@ import { makeExecutableSchema } from 'graphql-tools';
 import Cors from 'micro-cors';
 import { typeDefs } from '../../utils/api/typeDefs';
 import { resolvers } from '../../utils/api/resolvers';
+import { applyMiddleware } from "graphql-middleware";
+import { log } from "../../utils/api/log";
+
 
 const cors = Cors();
 
-const schema = makeExecutableSchema({ typeDefs, resolvers });
+const schema = applyMiddleware(
+    makeExecutableSchema({ typeDefs, resolvers }),
+    log
+    );
 
 export const config = {
     api: {
